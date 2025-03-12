@@ -554,4 +554,4 @@ def registrar_nota_aluno(id):
     return render_template('alunos/registrar_nota.html', aluno=aluno, disciplinas_matriculadas=disciplinas_matriculadas)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
