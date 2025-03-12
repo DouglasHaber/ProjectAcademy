@@ -44,6 +44,11 @@
             padding: 20px;
         }
         
+        .alert-container {
+            margin-left: 240px;
+            padding: 0 20px;
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 position: static;
@@ -51,7 +56,7 @@
                 top: auto;
             }
             
-            .content {
+            .content, .alert-container {
                 margin-left: 0;
             }
         }
@@ -103,7 +108,8 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 content">
+
+            <div class="alert-container">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -114,7 +120,9 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                
+            </div>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 content">
                 {% block content %}{% endblock %}
             </main>
         </div>
