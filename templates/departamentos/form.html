@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if departamento %}
+        Sistema Acadêmico - Editar Departamento
+    {% else %}
+        Sistema Acadêmico - Novo Departamento
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                {% if departamento %}
+                    Editar Departamento
+                {% else %}
+                    Novo Departamento
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" value="{{ departamento.nome if departamento else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="sigla" class="form-label">Sigla</label>
+                            <input type="text" class="form-control" id="sigla" name="sigla" value="{{ departamento.sigla if departamento else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ departamento.descricao if departamento else '' }}</textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('listar_departamentos') }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                {% if departamento %}
+                                    Atualizar
+                                {% else %}
+                                    Cadastrar
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

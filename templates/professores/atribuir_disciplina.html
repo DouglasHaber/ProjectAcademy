@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema Acadêmico - Atribuir Disciplina ao Professor{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">Atribuir Disciplina ao Professor</h1>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Informações do Professor</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ professor.nome }}</p>
+                            <p><strong>Matrícula:</strong> {{ professor.matricula }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Departamento:</strong>
+                                {% set departamento = professor.get_departamento() %}
+                                {% if departamento %}
+                                    {{ departamento.sigla }} - {{ departamento.nome }}
+                                {% endif %}
+                            </p>
+                            <p><strong>Titulação:</strong> {{ professor.titulacao }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Selecionar Disciplina</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="disciplina_id" class="form-label">Disciplina</label>
+                            <select class="form-select" id="disciplina_id" name="disciplina_id" required>
+                                <option value="">Selecione uma disciplina</option>
+                                {% for disciplina in disciplinas %}
+                                    <option value="{{ disciplina.id }}">
+                                        {{ disciplina.codigo }} - {{ disciplina.nome }} 
+                                        ({{ disciplina.semestre }}º Semestre)
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="semestre" class="form-label">Semestre Letivo (ex: 2023.1)</label>
+                            <input type="text" class="form-control" id="semestre" name="semestre" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('listar_disciplinas_professor', id=professor.id) }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-info">Atribuir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

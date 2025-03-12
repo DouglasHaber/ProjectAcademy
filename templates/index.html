@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema Acadêmico - Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2 border-bottom pb-2">Dashboard</h1>
+            <p class="lead">Bem-vindo ao Sistema Acadêmico - Gerencie departamentos, cursos, disciplinas, professores e alunos.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-building fa-2x mb-3 text-primary"></i><br>
+                        Departamentos
+                    </h5>
+                    <p class="card-text">Gerencie os departamentos da instituição.</p>
+                    <a href="{{ url_for('listar_departamentos') }}" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-graduation-cap fa-2x mb-3 text-success"></i><br>
+                        Cursos
+                    </h5>
+                    <p class="card-text">Gerencie os cursos oferecidos pela instituição.</p>
+                    <a href="{{ url_for('listar_cursos') }}" class="btn btn-success">Acessar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-book fa-2x mb-3 text-info"></i><br>
+                        Disciplinas
+                    </h5>
+                    <p class="card-text">Gerencie as disciplinas dos cursos.</p>
+                    <a href="{{ url_for('listar_disciplinas') }}" class="btn btn-info">Acessar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-chalkboard-teacher fa-2x mb-3 text-warning"></i><br>
+                        Professores
+                    </h5>
+                    <p class="card-text">Gerencie os professores e suas atribuições.</p>
+                    <a href="{{ url_for('listar_professores') }}" class="btn btn-warning">Acessar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-user-graduate fa-2x mb-3 text-danger"></i><br>
+                        Alunos
+                    </h5>
+                    <p class="card-text">Gerencie os alunos, matrículas e notas.</p>
+                    <a href="{{ url_for('listar_alunos') }}" class="btn btn-danger">Acessar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

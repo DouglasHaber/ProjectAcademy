@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema Acadêmico - Matricular Aluno em Disciplina{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">Matricular Aluno em Disciplina</h1>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Informações do Aluno</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+                            <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Curso:</strong>
+                                {% set curso = aluno.get_curso() %}
+                                {% if curso %}
+                                    {{ curso.codigo }} - {{ curso.nome }}
+                                {% endif %}
+                            </p>
+                            <p><strong>Data de Ingresso:</strong> {{ aluno.data_ingresso.strftime('%d/%m/%Y') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Selecionar Disciplina</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="disciplina_id" class="form-label">Disciplina</label>
+                            <select class="form-select" id="disciplina_id" name="disciplina_id" required>
+                                <option value="">Selecione uma disciplina</option>
+                                {% for disciplina in disciplinas %}
+                                    <option value="{{ disciplina.id }}">
+                                        {{ disciplina.codigo }} - {{ disciplina.nome }} 
+                                        ({{ disciplina.semestre }}º Semestre, {{ disciplina.carga_horaria }}h)
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="semestre" class="form-label">Semestre Letivo (ex: 2023.1)</label>
+                            <input type="text" class="form-control" id="semestre" name="semestre" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('historico_aluno', id=aluno.id) }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">Matricular</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

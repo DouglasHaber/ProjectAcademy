@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if curso %}
+        Sistema Acadêmico - Editar Curso
+    {% else %}
+        Sistema Acadêmico - Novo Curso
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                {% if curso %}
+                    Editar Curso
+                {% else %}
+                    Novo Curso
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" value="{{ curso.nome if curso else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="codigo" class="form-label">Código</label>
+                            <input type="text" class="form-control" id="codigo" name="codigo" value="{{ curso.codigo if curso else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="departamento_id" class="form-label">Departamento</label>
+                            <select class="form-select" id="departamento_id" name="departamento_id" required>
+                                <option value="">Selecione um departamento</option>
+                                {% for departamento in departamentos %}
+                                    <option value="{{ departamento.id }}" {% if curso and curso.departamento_id == departamento.id %}selected{% endif %}>
+                                        {{ departamento.sigla }} - {{ departamento.nome }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="duracao_semestres" class="form-label">Duração (semestres)</label>
+                            <input type="number" class="form-control" id="duracao_semestres" name="duracao_semestres" value="{{ curso.duracao_semestres if curso else '' }}" min="1" max="20" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('listar_cursos') }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">
+                                {% if curso %}
+                                    Atualizar
+                                {% else %}
+                                    Cadastrar
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

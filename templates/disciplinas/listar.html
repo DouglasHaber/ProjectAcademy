@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if curso %}
+        Sistema Acadêmico - Disciplinas do Curso {{ curso.nome }}
+    {% else %}
+        Sistema Acadêmico - Disciplinas
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-between align-items-center">
+            <h1 class="h2">
+                {% if curso %}
+                    Disciplinas do Curso {{ curso.nome }}
+                {% else %}
+                    Disciplinas
+                {% endif %}
+            </h1>
+            <a href="{{ url_for('cadastrar_disciplina') }}" class="btn btn-info">
+                <i class="fas fa-plus"></i> Nova Disciplina
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% if disciplinas %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Código</th>
+                                        <th>Nome</th>
+                                        <th>Curso</th>
+                                        <th>Semestre</th>
+                                        <th>Carga Horária</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for disciplina in disciplinas %}
+                                        <tr>
+                                            <td>{{ disciplina.id }}</td>
+                                            <td>{{ disciplina.codigo }}</td>
+                                            <td>{{ disciplina.nome }}</td>
+                                            <td>
+                                                {% set curso_disc = disciplina.get_curso() %}
+                                                {% if curso_disc %}
+                                                    {{ curso_disc.codigo }} - {{ curso_disc.nome }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ disciplina.semestre }}º</td>
+                                            <td>{{ disciplina.carga_horaria }}h</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{ url_for('detalhes_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-outline-info">
+                                                        <i class="fas fa-eye"></i> Detalhes
+                                                    </a>
+                                                    <a href="{{ url_for('editar_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ disciplina.id }}">
+                                                        <i class="fas fa-trash"></i> Excluir
+                                                    </button>
+                                                </div>
+                                                
+                                                <!-- Modal de confirmação de exclusão -->
+                                                <div class="modal fade" id="deleteModal{{ disciplina.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ disciplina.id }}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteModalLabel{{ disciplina.id }}">Confirmar Exclusão</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Tem certeza que deseja excluir a disciplina <strong>{{ disciplina.nome }}</strong>?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <form action="{{ url_for('excluir_disciplina', id=disciplina.id) }}" method="post">
+                                                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            {% if curso %}
+                                Nenhuma disciplina cadastrada para este curso.
+                            {% else %}
+                                Nenhuma disciplina cadastrada.
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

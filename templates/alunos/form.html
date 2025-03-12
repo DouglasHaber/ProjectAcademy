@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if aluno %}
+        Sistema Acadêmico - Editar Aluno
+    {% else %}
+        Sistema Acadêmico - Novo Aluno
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                {% if aluno %}
+                    Editar Aluno
+                {% else %}
+                    Novo Aluno
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" value="{{ aluno.nome if aluno else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="matricula" class="form-label">Matrícula</label>
+                            <input type="text" class="form-control" id="matricula" name="matricula" value="{{ aluno.matricula if aluno else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ aluno.email if aluno else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone" value="{{ aluno.telefone if aluno else '' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="curso_id" class="form-label">Curso</label>
+                            <select class="form-select" id="curso_id" name="curso_id" required>
+                                <option value="">Selecione um curso</option>
+                                {% for curso in cursos %}
+                                    <option value="{{ curso.id }}" {% if aluno and aluno.curso_id == curso.id %}selected{% endif %}>
+                                        {{ curso.codigo }} - {{ curso.nome }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="data_ingresso" class="form-label">Data de Ingresso</label>
+                            <input type="date" class="form-control" id="data_ingresso" name="data_ingresso" 
+                                value="{{ aluno.data_ingresso.strftime('%Y-%m-%d') if aluno and aluno.data_ingresso else '' }}" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('listar_alunos') }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-danger">
+                                {% if aluno %}
+                                    Atualizar
+                                {% else %}
+                                    Cadastrar
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

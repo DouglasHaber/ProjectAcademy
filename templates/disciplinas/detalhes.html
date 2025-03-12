@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema Acadêmico - Detalhes da Disciplina {{ disciplina.nome }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-between align-items-center">
+            <h1 class="h2">Detalhes da Disciplina</h1>
+            <div>
+                <a href="{{ url_for('editar_disciplina', id=disciplina.id) }}" class="btn btn-outline-primary">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="{{ url_for('listar_disciplinas') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Informações da Disciplina</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ disciplina.nome }}</p>
+                            <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
+                            <p><strong>Carga Horária:</strong> {{ disciplina.carga_horaria }}h</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Curso:</strong>
+                                {% set curso = disciplina.get_curso() %}
+                                {% if curso %}
+                                    {{ curso.codigo }} - {{ curso.nome }}
+                                {% endif %}
+                            </p>
+                            <p><strong>Semestre do Curso:</strong> {{ disciplina.semestre }}º semestre</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Professores</h5>
+                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#atribuirProfessorModal">
+                        <i class="fas fa-plus"></i> Atribuir Professor
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% if professores %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Matrícula</th>
+                                        <th>Nome</th>
+                                        <th>Departamento</th>
+                                        <th>Titulação</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for professor in professores %}
+                                        <tr>
+                                            <td>{{ professor.matricula }}</td>
+                                            <td>{{ professor.nome }}</td>
+                                            <td>
+                                                {% set dept = professor.get_departamento() %}
+                                                {% if dept %}
+                                                    {{ dept.sigla }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ professor.titulacao }}</td>
+                                            <td>
+                                                <a href="{{ url_for('listar_disciplinas_professor', id=professor.id) }}" class="btn btn-sm btn-outline-info">
+                                                    <i class="fas fa-eye"></i> Ver Disciplinas
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Nenhum professor atribuído a esta disciplina.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Alunos Matriculados</h5>
+                </div>
+                <div class="card-body">
+                    {% if alunos %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Matrícula</th>
+                                        <th>Nome</th>
+                                        <th>Curso</th>
+                                        <th>Email</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for aluno in alunos %}
+                                        <tr>
+                                            <td>{{ aluno.matricula }}</td>
+                                            <td>{{ aluno.nome }}</td>
+                                            <td>
+                                                {% set curso = aluno.get_curso() %}
+                                                {% if curso %}
+                                                    {{ curso.codigo }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ aluno.email }}</td>
+                                            <td>
+                                                <a href="{{ url_for('historico_aluno', id=aluno.id) }}" class="btn btn-sm btn-outline-info">
+                                                    <i class="fas fa-history"></i> Histórico
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Nenhum aluno matriculado nesta disciplina.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para atribuir professor -->
+<div class="modal fade" id="atribuirProfessorModal" tabindex="-1" aria-labelledby="atribuirProfessorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="atribuirProfessorModalLabel">Atribuir Professor à Disciplina</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('atribuir_professor_disciplina', disciplina_id=disciplina.id) }}" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="professor_id" class="form-label">Professor</label>
+                        <select class="form-select" id="professor_id" name="professor_id" required>
+                            <option value="">Selecione um professor</option>
+                            {% for prof in Professor.listar_todos() %}
+                                <option value="{{ prof.id }}">{{ prof.nome }} ({{ prof.matricula }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="semestre" class="form-label">Semestre Letivo (ex: 2023.1)</label>
+                        <input type="text" class="form-control" id="semestre" name="semestre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info">Atribuir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
